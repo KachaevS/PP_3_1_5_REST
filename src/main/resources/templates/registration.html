@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+</head>
+
+<body>
+
+<form th:method="POST" th:action="@{/registration}" th:object="${newUser}">
+    <label for="username">Введи имя:</label>
+    <input type="text" th:field="*{username}" id="username" />
+    <label for="password">Введи пароль:</label>
+    <input type="text" th:field="*{password}" id="password" />
+    <label for="email">Введи почту:</label>
+    <input type="text" th:field="*{email}" id="email" />
+
+    <input type="submit" value="Зарегистрировать"/>
+</form>
+
+
+
+<!--<div>-->
+<!--    <form th:method="POST" th:action="@{/registration}" th:object="${newUser}">-->
+<!--        <h2>Регистрация</h2>-->
+<!--        <div>-->
+<!--            <input type="text" th:field="*{username}" placeholder="Username" autofocus="true">-->
+<!--            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>-->
+<!--            <div th:text="${usernameError}"></div>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <input type="password" th:field="*{password}" placeholder="Password">-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <input type="password" th:field="*{passwordConfirm}" placeholder="Confirm your password">-->
+<!--            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>-->
+<!--            <div th:text="${passwordError}"></div>-->
+<!--        </div>-->
+<!--        <button type="submit">Зарегистрироваться</button>-->
+<!--    </form>-->
+<!--    <a href="/">Главная</a>-->
+<!--</div>-->
+</body>
+</html>

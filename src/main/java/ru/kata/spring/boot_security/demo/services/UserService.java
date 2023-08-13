@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -13,6 +14,8 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +28,8 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    public User findByUsername (String username) {
+
+    public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
@@ -41,9 +45,23 @@ public class UserService implements UserDetailsService {
                 User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities (Collection<Role> roles){
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
 
+    public List<User> allUsers() {
+        return userRepository.findAll();
+    }
 
+    public User getById(Long id) {
+        return userRepository.getById(id);
+    }
+
+    public void saveUser(User user) {
+      userRepository.save(user);
+    }
+
+    public void delete(User user) {
+        userRepository.delete(user);
+    }
 }

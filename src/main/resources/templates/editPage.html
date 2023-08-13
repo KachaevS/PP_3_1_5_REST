@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/admin/edit}" th:object="${user}">
+    <input type="hidden" name="id" th:value="${user.id}"/>
+    <input type="hidden" name="password" th:value="${user.password}"/>
+    <input type="hidden" th:field="*{roles}" />
+
+    <label for="username">Новое имя пользователя:</label>
+    <input type="text" th:field="*{username}" id="username" />
+    <br>
+    <label for="email">Новая электронная почта:</label>
+    <input type="text" th:field="*{email}" id="email" />
+
+
+
+    <input type="submit" value="Изменить"/>
+</form>
+
+
+
+Редактируется:
+<span th:text="${user.username}"></span>
+
+
+</body>
+</html>
