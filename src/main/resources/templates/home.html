@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Главная</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="${contextPath}/resources/css/style.css">
+</head>
+<body>
+
+<div>
+    <h3 th:if="${#request.getUserPrincipal() != null}" th:text="${#request.getUserPrincipal().getName()}"></h3>
+    <div th:unless="${#request.isUserInRole('ROLE_USER')}">
+        <h4><a href="/login">Войти</a></h4>
+        <h4><a href="/registration">Зарегистрироваться</a></h4>
+    </div>
+    <div th:if="${#request.isUserInRole('ROLE_USER')}">
+        <h4><a href="/logout">Выйти</a></h4>
+    </div>
+    <h4 th:if="${#request.isUserInRole('ROLE_USER')}"><a href="/user">Посмотреть свой профиль</a></h4>
+    <h4 th:if="${#request.isUserInRole('ROLE_ADMIN')}"><a href="/admin">Посмотреть всех пользователей</a></h4>
+</div>
+</body>
+</html>
