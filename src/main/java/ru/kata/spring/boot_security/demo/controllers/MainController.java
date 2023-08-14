@@ -33,40 +33,6 @@ public class MainController {
         return modelAndView;
     }
 
-    @GetMapping("/user")
-    public ModelAndView modelAndView(Principal principal) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("user");
-        User user = userService.findByUsername(principal.getName());
-        modelAndView.addObject(user);
-        return modelAndView;
-    }
-
-    @GetMapping(value = "/admin")
-    public ModelAndView allUsers() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin");
-        modelAndView.addObject("users", userService.allUsers());
-        return modelAndView;
-    }
-
-    @GetMapping(value = "admin/edit/{id}")
-    public ModelAndView editPage(@PathVariable("id") Long id) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("editPage");
-        modelAndView.addObject("user", userService.getById(id));
-        return modelAndView;
-    }
-
-
-    @GetMapping(value = "admin/delete/{id}")
-    public ModelAndView deleteUser(@PathVariable("id") Long id) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/admin");
-        userService.delete(userService.getById(id));
-        return modelAndView;
-    }
-
 
     @GetMapping("/registration")
     public ModelAndView registration() {
@@ -75,29 +41,6 @@ public class MainController {
         modelAndView.addObject("newUser", new User());
         List<Role> roles = roleService.findAll();
         modelAndView.addObject("allRoles", roles);
-        return modelAndView;
-    }
-
-
-    @PostMapping(value = "admin/edit")
-    public ModelAndView editUser(@ModelAttribute("user") User user, @RequestParam(value = "isAdmin", required = false) boolean isAdmin) {
-        ModelAndView modelAndView = new ModelAndView();
-
-        if (!userService.editUser(user)) {
-            modelAndView.setViewName("editPage");
-            modelAndView.addObject("message", "Пользователь с таким именем уже существует");
-            return modelAndView;
-        }
-
-        if (isAdmin) {
-            user.addRole(roleService.findAll().get(1));
-        } else {
-            Role adminRole = roleService.findAll().get(1);
-            user.getRoles().remove(adminRole);
-        }
-
-        userService.editUser(user);
-        modelAndView.setViewName("redirect:/admin");
         return modelAndView;
     }
 

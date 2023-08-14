@@ -26,7 +26,7 @@
 
 
 </br>
-<h4><a href="/">Назад</a></h4>
+<h4><a th:if="${#request.isUserInRole('ROLE_ADMIN')}" href="/">Назад</a></h4>
 
 <br>
 <br>
