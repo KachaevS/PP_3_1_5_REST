@@ -20,9 +20,6 @@ public class User implements UserDetails {
 
     private String password;
 
-    @Transient
-    private String passwordConfirm;
-
     private String email;
 
     @ManyToMany
@@ -62,4 +59,6 @@ public class User implements UserDetails {
     public void addRole(Role role) {
         this.roles.add(role);
     }
+
+
 }

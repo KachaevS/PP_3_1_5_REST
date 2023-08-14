@@ -6,6 +6,16 @@
 </head>
 <body>
 
+
+<h2>Изменение данных пользователя</h2>
+
+Редактируется:
+<span th:text="${user.username}"></span>
+
+<br>
+<br>
+
+
 <div th:if="${message}" style="border: 2px solid red; padding: 5px;">
     <h4 th:text="${message}"></h4>
 </div>
@@ -24,9 +34,15 @@
     <label for="email">Новая электронная почта:</label>
     <input type="text" th:field="*{email}" id="email" required minlength="4" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" />
     <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-
+    <br>
+    <label for="isAdmin">Администратор:</label>
+    <input type="checkbox" id="isAdmin" name="isAdmin" th:checked="${user.roles.?[name == 'ROLE_ADMIN'].size() > 0}"/>
+    <br>
+    <br>
+    <br>
     <input type="submit" value="Изменить"/>
-
+    <br>
+    <br>
     <a href="/admin">Назад</a>
 
 </form>
@@ -35,8 +51,7 @@
 
 
 
-Редактируется:
-<span th:text="${user.username}"></span>
+
 
 
 <br>

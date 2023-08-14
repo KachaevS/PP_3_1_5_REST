@@ -26,6 +26,7 @@
         <th>id</th>
         <th>username</th>
         <th>email</th>
+        <th>admin</th>
     </tr>
     </thead>
     <tbody>
@@ -33,6 +34,12 @@
         <td th:text="${user.id}"></td>
         <td th:text="${user.username}"></td>
         <td th:text="${user.email}"></td>
+
+        <td>
+            <input type="checkbox" th:checked="${user.roles.?[name == 'ROLE_ADMIN'].size() > 0}" disabled="disabled">
+        </td>
+
+
         <td><a th:href="@{/admin/edit/{id}(id=${user.id})}">изменить</a>
         <td><a th:href="@{/admin/delete/{id}(id=${user.id})}">удалить</a>
 

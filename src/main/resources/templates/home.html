@@ -7,6 +7,12 @@
 </head>
 <body>
 
+
+<div th:if="${message}" style="border: 2px solid green; padding: 5px;">
+    <h4 th:text="${message}"></h4>
+</div>
+
+
 <div>
     <h3 th:if="${#request.getUserPrincipal() != null}" th:text="${#request.getUserPrincipal().getName()}"></h3>
     <div th:unless="${#request.isUserInRole('ROLE_USER')}">

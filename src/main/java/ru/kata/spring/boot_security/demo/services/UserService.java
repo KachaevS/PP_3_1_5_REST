@@ -14,10 +14,7 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,21 +70,22 @@ public class UserService implements UserDetailsService {
 
 
     @Transactional
-    public boolean saveUser(User user) {
+    public boolean saveUser(User user, boolean isAdmin) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
 
         if (userFromDB != null) {
             return false;
         }
-
-        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        Collection<Role> roles = new ArrayList<>();
+        roles.add(new Role(1L, "ROLE_USER"));
+        user.setRoles(roles);
+        if (isAdmin) {
+            roles.add(new Role(2L, "ROLE_ADMIN)"));
+        }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
     }
-
-
-
 
 
     @Transactional
@@ -99,7 +97,6 @@ public class UserService implements UserDetailsService {
                 return false;
             }
         }
-
         userRepository.save(user);
         return true;
     }
