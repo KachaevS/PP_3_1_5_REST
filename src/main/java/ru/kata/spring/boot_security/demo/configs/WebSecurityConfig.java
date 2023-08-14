@@ -7,24 +7,22 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import ru.kata.spring.boot_security.demo.services.UserService;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+
+    private SuccessUserHandler successUserHandler;
+
+    @Autowired
+    public void setSuccessUserHandler(SuccessUserHandler successUserHandler) {
+        this.successUserHandler = successUserHandler;
+    }
+
     private UserService userService;
-
-
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -37,13 +35,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(("/admin/**")).hasRole("ADMIN")
                 .and()
                 .formLogin()
+                .successHandler(successUserHandler)
                 .and()
                 .logout().logoutSuccessUrl("/");
     }
 
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

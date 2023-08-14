@@ -1,17 +1,20 @@
 package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,6 +23,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    public void setbCryptPasswordEncoder(@Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     private UserRepository userRepository;
 
@@ -57,11 +70,26 @@ public class UserService implements UserDetailsService {
         return userRepository.getById(id);
     }
 
-    public void saveUser(User user) {
-      userRepository.save(user);
+    public void editUser(User user) {
+        userRepository.save(user);
+
     }
 
     public void delete(User user) {
         userRepository.delete(user);
+    }
+
+
+    @Transactional
+    public void saveUser(User user) {
+//        User userFromDB = userRepository.findByUsername(user.getUsername());
+//
+//        if (userFromDB != null) {
+//            return false;
+//        }
+
+//        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 }

@@ -6,6 +6,11 @@
 </head>
 <body>
 
+<div class="popup" th:if="${message}">
+    <p th:text="${message}"></p>
+</div>
+
+
 <h2>Пользователи</h2>
 
 <style>
@@ -36,7 +41,13 @@
 </table>
 
 
-<h3><a th:href="@{/admin/new}">Добавить</a></h3>
+<h3><a th:href="@{/registration}">Добавить</a></h3>
 <h4><a href="/">Назад</a></h4>
+
+
+<br>
+<br>
+<a th:href="@{/logout}">Выйти из своей учётной записи</a>
+
 </body>
 </html>

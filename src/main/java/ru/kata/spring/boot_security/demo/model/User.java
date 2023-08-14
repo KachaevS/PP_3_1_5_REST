@@ -1,23 +1,29 @@
 package ru.kata.spring.boot_security.demo.model;
 
-
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 @Entity
 @Data
 @Table(name = "users")
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Size(min=3, message = "Не меньше 4 знаков")
     private String username;
+    @Size(min=3, message = "Не меньше 4 знаков")
     private String password;
-//    private String passwordConfirm;
+    @Transient
+    private String passwordConfirm;
+    @Size(min=5, message = "Не меньше 6 знаков")
     private String email;
 
     @ManyToMany
@@ -49,5 +55,12 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public User() {
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 }
