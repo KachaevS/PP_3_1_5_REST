@@ -12,9 +12,10 @@ import java.util.List;
 @RestController
 public class MainController {
 
-    UserService userService;
+    private final UserService userService;
 
-    RoleService roleService;
+    private final RoleService roleService;
+
 
 
     @Autowired
@@ -55,13 +56,6 @@ public class MainController {
         return modelAndView;
     }
 
-    @PostMapping(value = "admin/edit")
-    public ModelAndView editUser(@ModelAttribute("user") User user) {
-        ModelAndView modelAndView = new ModelAndView();
-        userService.editUser(user);
-        modelAndView.setViewName("redirect:/admin");
-        return modelAndView;
-    }
 
 
     @GetMapping(value = "admin/delete/{id}")
@@ -83,13 +77,46 @@ public class MainController {
         return modelAndView;
     }
 
+//
+//    @PostMapping(value = "admin/edit")
+//    public ModelAndView editUser(@ModelAttribute("user") User user) {
+//        ModelAndView modelAndView = new ModelAndView();
+//
+//        userService.editUser(user);
+//        modelAndView.setViewName("redirect:/admin");
+//        return modelAndView;
+//    }
+
+        @PostMapping(value = "admin/edit")
+    public ModelAndView editUser(@ModelAttribute("user") User user) {
+        ModelAndView modelAndView = new ModelAndView();
+
+            if (!userService.saveUser(user)){
+                modelAndView.setViewName("editPage");
+                modelAndView.addObject("message", "Пользователь с таким именем уже существует");
+                return modelAndView;
+            }
+
+        userService.saveUser(user);
+        modelAndView.setViewName("redirect:/admin");
+        return modelAndView;
+    }
+
+
+
 
     @PostMapping("/registration")
     public ModelAndView addUser(@ModelAttribute("newUser") User user) {
         ModelAndView modelAndView = new ModelAndView();
+
+        if (!userService.saveUser(user)){
+            modelAndView.setViewName("registration");
+            modelAndView.addObject("message", "Пользователь с таким именем уже существует");
+            return modelAndView;
+        }
         modelAndView.setViewName("redirect:/");
-        userService.saveUser(user);
         return modelAndView;
     }
+
 }
 

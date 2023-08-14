@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserDetailsService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
 
 
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -34,7 +34,7 @@ public class UserService implements UserDetailsService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -70,10 +70,6 @@ public class UserService implements UserDetailsService {
         return userRepository.getById(id);
     }
 
-    public void editUser(User user) {
-        userRepository.save(user);
-
-    }
 
     public void delete(User user) {
         userRepository.delete(user);
@@ -81,15 +77,16 @@ public class UserService implements UserDetailsService {
 
 
     @Transactional
-    public void saveUser(User user) {
-//        User userFromDB = userRepository.findByUsername(user.getUsername());
-//
-//        if (userFromDB != null) {
-//            return false;
-//        }
+    public boolean saveUser(User user) {
+        User userFromDB = userRepository.findByUsername(user.getUsername());
 
-//        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        if (userFromDB != null) {
+            return false;
+        }
+
+        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+        return true;
     }
 }

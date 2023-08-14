@@ -6,6 +6,10 @@
 </head>
 <body>
 
+<div th:if="${message}" style="border: 2px solid red; padding: 5px;">
+    <h4 th:text="${message}"></h4>
+</div>
+
 
 <form th:method="POST" th:action="@{/admin/edit}" th:object="${user}">
     <input type="hidden" name="id" th:value="${user.id}"/>
@@ -13,18 +17,18 @@
     <input type="hidden" th:field="*{roles}" />
 
     <label for="username">Новое имя пользователя:</label>
-<!--    <input type="text" th:field="*{username}" id="username" />-->
-
-<!--    <input type="text" th:field="*{username}" id="username" required minlength="3" />-->
-
     <input type="text" th:field="*{username}" id="username" required minlength="4" />
     <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
 
     <br>
     <label for="email">Новая электронная почта:</label>
-    <input type="text" th:field="*{email}" id="email" />
+    <input type="text" th:field="*{email}" id="email" required minlength="4" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" />
+    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
 
     <input type="submit" value="Изменить"/>
+
+    <a href="/admin">Назад</a>
+
 </form>
 
 

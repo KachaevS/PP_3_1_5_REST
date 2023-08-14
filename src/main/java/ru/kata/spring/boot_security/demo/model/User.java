@@ -17,13 +17,13 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(min=3, message = "Не меньше 4 знаков")
     private String username;
-    @Size(min=3, message = "Не меньше 4 знаков")
+
     private String password;
+
     @Transient
     private String passwordConfirm;
-    @Size(min=5, message = "Не меньше 6 знаков")
+
     private String email;
 
     @ManyToMany

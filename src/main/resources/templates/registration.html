@@ -7,32 +7,26 @@
 
 <body>
 
+<div th:if="${message}" style="border: 2px solid red; padding: 5px;">
+    <h4 th:text="${message}"></h4>
+</div>
+
 <div>
     <form th:method="POST" th:action="@{/registration}" th:object="${newUser}">
         <h2>Регистрация нового пользователя</h2>
         <div>
-            <input type="text" th:field="*{username}" placeholder="Username" autofocus="true">
-<!--            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>-->
-<!--            <div th:text="${usernameError}"></div>-->
+            <input type="text" th:field="*{username}" placeholder="Username" autofocus="true" required minlength="4">
+            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
         </div>
         <div>
-            <input type="password" th:field="*{password}" placeholder="Password">
+            <input type="password" th:field="*{password}" placeholder="Password" required minlength="3">
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+
         </div>
         <div>
-            <input type="email" th:field="*{email}" placeholder="Email">
+            <input type="email" th:field="*{email}" placeholder="Email" required minlength="4">
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
         </div>
-
-            <p>
-                <label>Roles:
-                    <input type="checkbox" name="roles"
-                           th:each="role : ${allRoles}"
-                           th:text="${role.name}"
-                           th:value="${role.id}"
-                           th:field="*{roles}"
-                    />
-                </label>
-            </p>
-
 
 
         <button type="submit">Зарегистрироваться</button>
