@@ -91,13 +91,13 @@ public class MainController {
     public ModelAndView editUser(@ModelAttribute("user") User user) {
         ModelAndView modelAndView = new ModelAndView();
 
-            if (!userService.saveUser(user)){
+            if (!userService.editUser(user)){
                 modelAndView.setViewName("editPage");
                 modelAndView.addObject("message", "Пользователь с таким именем уже существует");
                 return modelAndView;
             }
 
-        userService.saveUser(user);
+        userService.editUser(user);
         modelAndView.setViewName("redirect:/admin");
         return modelAndView;
     }

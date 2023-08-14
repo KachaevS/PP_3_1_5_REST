@@ -13,22 +13,18 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
 
-//    @PersistenceContext
-//    private EntityManager entityManager;
-
-
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
     public void setbCryptPasswordEncoder(@Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -89,4 +85,23 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
         return true;
     }
+
+
+
+
+
+    @Transactional
+    public boolean editUser(User user) {
+        User userFromDB = userRepository.findByUsername(user.getUsername());
+
+        if (userFromDB != null) {
+            if (!Objects.equals(user.getId(), userFromDB.getId())) {
+                return false;
+            }
+        }
+
+        userRepository.save(user);
+        return true;
+    }
 }
+
