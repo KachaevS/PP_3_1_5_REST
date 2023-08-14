@@ -91,7 +91,6 @@ public class MainController {
 
         if (isAdmin) {
             user.addRole(roleService.findAll().get(1));
-            ;
         } else {
             Role adminRole = roleService.findAll().get(1);
             user.getRoles().remove(adminRole);
