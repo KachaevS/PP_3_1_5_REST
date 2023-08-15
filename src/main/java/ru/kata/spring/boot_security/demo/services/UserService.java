@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.services;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,13 +42,11 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", username));
         }
-        Hibernate.initialize(user.getRoles());
         return new org.springframework.security.core.userdetails.
                 User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
@@ -65,6 +64,7 @@ public class UserService implements UserDetailsService {
     }
 
 
+    @Transactional
     public void delete(User user) {
         userRepository.delete(user);
     }
