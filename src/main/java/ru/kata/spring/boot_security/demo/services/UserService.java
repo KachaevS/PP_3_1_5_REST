@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.services;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
@@ -46,7 +47,7 @@ public class UserService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", username));
         }
-
+        Hibernate.initialize(user.getRoles());
         return new org.springframework.security.core.userdetails.
                 User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
