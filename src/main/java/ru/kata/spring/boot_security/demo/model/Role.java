@@ -1,7 +1,9 @@
 package ru.kata.spring.boot_security.demo.model;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 
 @Entity

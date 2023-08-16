@@ -3,10 +3,10 @@ package ru.kata.spring.boot_security.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
-import ru.kata.spring.boot_security.demo.model.Role;
 
 @RestController
 @RequestMapping("/admin")
@@ -28,14 +28,6 @@ public class AdminController {
         modelAndView.addObject("users", userService.allUsers());
         return modelAndView;
     }
-
-//    @GetMapping("/menu")
-//    public ModelAndView adminMenu (){
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("home");
-//        return modelAndView;
-//    }
-
 
     @GetMapping("/edit/{id}")
     public ModelAndView editPage(@PathVariable("id") Long id) {
