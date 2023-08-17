@@ -14,23 +14,19 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
-    private SuccessUserHandler successUserHandler;
+    private final SuccessUserHandler successUserHandler;
+    private final UserService userService;
 
     @Autowired
-    public void setSuccessUserHandler(SuccessUserHandler successUserHandler) {
+    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserService userService) {
         this.successUserHandler = successUserHandler;
-    }
-
-    private UserService userService;
-    @Autowired
-    public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/").not().authenticated()
                 .antMatchers("/user/**").hasRole("USER")
                 .antMatchers(("/admin/**")).hasRole("ADMIN")
                 .and()

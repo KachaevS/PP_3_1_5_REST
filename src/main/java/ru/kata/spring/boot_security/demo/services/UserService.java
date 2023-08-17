@@ -23,20 +23,15 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserDetailsService {
 
-    BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    public void setbCryptPasswordEncoder(@Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
-
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
     private final RoleService roleService;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleService roleService) {
+    public UserService(UserRepository userRepository, RoleService roleService, @Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.roleService = roleService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
 
