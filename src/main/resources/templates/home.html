@@ -17,7 +17,6 @@
     <h3 th:if="${#request.getUserPrincipal() != null}" th:text="${#request.getUserPrincipal().getName()}"></h3>
     <div th:unless="${#request.isUserInRole('ROLE_ADMIN')}">
         <h4><a href="/login">Войти</a></h4>
-        <h4><a href="/registration">Зарегистрироваться</a></h4>
     </div>
 
     <div th:if="${#request.isUserInRole('ROLE_ADMIN')}">

@@ -31,10 +31,12 @@ public class UserService implements UserDetailsService {
     }
 
     private final UserRepository userRepository;
+    private final RoleService roleService;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleService roleService) {
         this.userRepository = userRepository;
+        this.roleService = roleService;
     }
 
 
@@ -91,7 +93,7 @@ public class UserService implements UserDetailsService {
 
 
     @Transactional
-    public boolean editUser(User user) {
+    public boolean editUser(User user, boolean isAdmin) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
 
         if (userFromDB != null) {
@@ -99,6 +101,14 @@ public class UserService implements UserDetailsService {
                 return false;
             }
         }
+
+        if (isAdmin) {
+            user.addRole(roleService.findAll().get(1));
+        } else {
+            Role adminRole = roleService.findAll().get(1);
+            user.getRoles().remove(adminRole);
+        }
+
         userRepository.save(user);
         return true;
     }

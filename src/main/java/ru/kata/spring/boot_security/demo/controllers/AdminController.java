@@ -1,24 +1,23 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
-@RestController
+@Controller
 @RequestMapping("/admin")
 public class AdminController {
 
     private final UserService userService;
-    private final RoleService roleService;
+
 
     @Autowired
-    public AdminController(UserService userService, RoleService roleService) {
+    public AdminController(UserService userService) {
         this.userService = userService;
-        this.roleService = roleService;
+
     }
 
     @GetMapping()
@@ -49,20 +48,37 @@ public class AdminController {
     public ModelAndView editUser(@ModelAttribute("user") User user, @RequestParam(value = "isAdmin", required = false) boolean isAdmin) {
         ModelAndView modelAndView = new ModelAndView();
 
-        if (!userService.editUser(user)) {
+        if (!userService.editUser(user, isAdmin)) {
             modelAndView.setViewName("editPage");
             modelAndView.addObject("message", "Пользователь с таким именем уже существует");
             return modelAndView;
         }
+        userService.editUser(user, isAdmin);
+        modelAndView.setViewName("redirect:/admin");
+        return modelAndView;
+    }
 
-        if (isAdmin) {
-            user.addRole(roleService.findAll().get(1));
-        } else {
-            Role adminRole = roleService.findAll().get(1);
-            user.getRoles().remove(adminRole);
+
+
+    @GetMapping("/registration")
+    public ModelAndView registration() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("registration");
+        modelAndView.addObject("newUser", new User());
+        return modelAndView;
+    }
+
+    @PostMapping("/registration")
+    public ModelAndView addUser(@ModelAttribute("newUser") User user, @RequestParam(value = "isAdmin", required = false) boolean isAdmin) {
+        ModelAndView modelAndView = new ModelAndView();
+
+
+        if (!userService.saveUser(user, isAdmin)) {
+            modelAndView.setViewName("registration");
+            modelAndView.addObject("message", "Пользователь с таким именем уже существует");
+            return modelAndView;
         }
 
-        userService.editUser(user);
         modelAndView.setViewName("redirect:/admin");
         return modelAndView;
     }
