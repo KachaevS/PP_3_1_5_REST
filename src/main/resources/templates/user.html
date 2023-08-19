@@ -1,34 +1,116 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>User Details</title>
+    <title>User page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 </head>
+
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #ffffff; /* Цвет фона таблицы */
+        border: 1px solid #dddddd; /* Тонкие серые границы */
+    }
+
+    h4 {
+        background-color: #dcdcdc; /* цвет подложки заголовка */
+        padding: 10px;
+        margin: 0;
+    }
+
+    th, td {
+        padding: 8px;
+        border-bottom: 1px solid #dddddd; /* Тонкие серые границы для каждой ячейки */
+    }
+
+    th {
+        background-color: #f2f2f2; /* Цвет фона заголовков */
+    }
+
+
+</style>
+
 <body>
-<h1>Профиль</h1>
 
-<table>
-    <tr>
-        <th style="text-align: left;">id</th>
-        <td style="text-align: left;" th:text="${user.id}"></td>
-    </tr>
-    <br>
-    <tr>
-        <th style="text-align: left;">Username</th>
-        <td style="text-align: left;" th:text="${user.username}"></td>
-    </tr>
-    <br>
-    <tr>
-        <th style="text-align: left;">Email</th>
-        <td style="text-align: left;" th:text="${user.email}"></td>
-    </tr>
-    <br>
-</table>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto justify-content-start">
+                <li class="nav-item mr-auto justify-content-start">
+        <span class="navbar-text mr-3">
+            <b th:text="${user.email}"></b> with roles:
+            <span th:each="role, status : ${user.roles}">
+                <span th:text="${role.name.startsWith('ROLE_') ? role.name.substring(5) : role.name}"></span>
+                <span th:if="${!status.last}">, </span>
+            </span>
+        </span>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto justify-content-end">
+                <li class="nav-item">
+                    <a class="btn btn-danger" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
 
 <br>
 <br>
-<a th:href="@{/logout}">Выйти из своей учётной записи</a>
+<br>
 
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-1 bg-light">
+            <nav class="nav flex-column" style="height: 100vh;">
+                <a class="nav-link active" href="#!">Active</a>
+                <a class="nav-link" href="#!">Link</a>
+                <a class="nav-link" href="#!">Link</a>
+            </nav>
+        </div>
+        <div class="col-11">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>User information-page</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>About user</h4>
+                        <table class="table table-striped">
+                            <tr>
+                                <th>id</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Roles</th>
+                            </tr>
+                            <tr>
+                                <td th:text="${user.id}"></td>
+                                <td th:text="${user.username}"></td>
+                                <td th:text="${user.email}"></td>
+                                <td>
+                                    <span th:each="role, status : ${user.roles}">
+                                        <span th:text="${role.name.startsWith('ROLE_') ? role.name.substring(5) : role.name}"></span>
+                                        <span th:if="${!status.last}">, </span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    </div>
 </body>
 </html>
 
