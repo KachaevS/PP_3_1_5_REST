@@ -59,5 +59,9 @@ public class User implements UserDetails {
         this.roles.add(role);
     }
 
+    public boolean hasRole(Role role) {
+        return roles.contains(role);
+    }
+
 
 }

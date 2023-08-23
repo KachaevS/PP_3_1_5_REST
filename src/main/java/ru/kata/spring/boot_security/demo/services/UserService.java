@@ -69,17 +69,11 @@ public class UserService implements UserDetailsService {
 
 
     @Transactional
-    public boolean saveUser(User user, boolean isAdmin) {
+    public boolean saveUser(User user) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
 
         if (userFromDB != null) {
             return false;
-        }
-        Collection<Role> roles = new ArrayList<>();
-        roles.add(new Role(1L, "ROLE_USER"));
-        user.setRoles(roles);
-        if (isAdmin) {
-            roles.add(new Role(2L, "ROLE_ADMIN)"));
         }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -88,20 +82,13 @@ public class UserService implements UserDetailsService {
 
 
     @Transactional
-    public boolean editUser(User user, boolean isAdmin) {
+    public boolean editUser(User user) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
 
         if (userFromDB != null) {
             if (!Objects.equals(user.getId(), userFromDB.getId())) {
                 return false;
             }
-        }
-
-        if (isAdmin) {
-            user.addRole(roleService.findAll().get(1));
-        } else {
-            Role adminRole = roleService.findAll().get(1);
-            user.getRoles().remove(adminRole);
         }
 
         userRepository.save(user);

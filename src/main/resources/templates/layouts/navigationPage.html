@@ -1,0 +1,9 @@
+<div th:fragment="navigation(currentPage)" class="bg-white" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <nav class="btn-group-vertical mt-3 mb-3 d-flex flex-column">
+    <a sec:authorize="hasRole('ADMIN')" type="button" class="btn btn-primary btn-block mb-2 text-start"
+       th:classappend="${currentPage == 'admin'} ? 'btn-primary' : 'btn-light'" th:href="@{/admin}">Admin</a>
+
+    <a type="button" class="btn btn-primary btn-block mb-2 text-start"
+       th:classappend="${currentPage == 'user'} ? 'btn-primary' : 'btn-light'" th:href="@{/user}">User</a>
+  </nav>
+</div>

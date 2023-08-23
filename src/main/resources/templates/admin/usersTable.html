@@ -1,0 +1,36 @@
+<div class="table-responsive mx-auto">
+    <table class="Users table table-striped my-6">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">Role</th>
+            <th class="text-center" scope="col">Edit</th>
+            <th class="text-center" scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="userFromTable:${users}">
+            <th class="align-middle" scope="row" th:text="${userFromTable.id}"></th>
+            <td class="align-middle" th:text="${userFromTable.username}"></td>
+            <td class="align-middle" th:text="${userFromTable.email}"></td>
+            <td class="align-middle">
+                <th:block th:each="role : ${userFromTable.getRoles()}">
+                    <span th:text="${role.authority.replaceFirst('ROLE_', '')}"></span>
+                </th:block>
+            </td>
+
+            <td class="align-middle text-center">
+                <a th:href="@{/admin/userForm/(userId=${userFromTable.id})}"
+                   class="btn btn-sm btn-success edit-button" data-bs-toggle="modal" data-bs-target="#userFormModal">Edit</a>
+            </td>
+            <td class="align-middle text-center">
+                <a th:href="@{/admin/userForm/(userId=${userFromTable.id})}"
+                   class="btn btn-sm btn-danger delete-button" data-bs-toggle="modal" data-bs-target="#userFormModal">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script th:src="@{/js/its.js}"></script>

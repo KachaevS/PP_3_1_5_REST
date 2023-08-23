@@ -27,6 +27,11 @@ public class UserController {
         modelAndView.setViewName("user");
         User user = userService.findByUsername(principal.getName());
         modelAndView.addObject("user", user);
+
+        if (user.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN"))) {
+            modelAndView.addObject("users", userService.allUsers());
+        }
+
         return modelAndView;
     }
 

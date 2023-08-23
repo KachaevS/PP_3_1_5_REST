@@ -1,0 +1,29 @@
+<h1>Admin panel</h1>
+<table id="adminTable" class="table table-striped">
+  <thead>
+  <tr>
+    <th colspan="6" style="border: 1px solid black; text-align: left;">All users</th>
+  </tr>
+  <tr>
+    <th>id</th>
+    <th>username</th>
+    <th>email</th>
+    <th>admin</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="user : ${users}">
+    <td th:text="${user.id}"></td>
+    <td th:text="${user.username}"></td>
+    <td th:text="${user.email}"></td>
+
+    <td>
+      <input type="checkbox" th:checked="${user.roles.?[name == 'ROLE_ADMIN'].size() > 0}"
+             disabled="disabled">
+    </td>
+
+
+    <td><a th:href="@{/admin/edit/{id}(id=${user.id})}">изменить</a>
+    <td><a th:href="@{/admin/delete/{id}(id=${user.id})}">удалить</a>
+  </tr>
+</table>
