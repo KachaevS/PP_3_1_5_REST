@@ -24,12 +24,10 @@ public class UserService implements UserDetailsService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
-    private final RoleService roleService;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleService roleService, @Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, @Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
-        this.roleService = roleService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -83,22 +81,14 @@ public class UserService implements UserDetailsService {
     @Transactional
     public boolean editUser(User user, Long id) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
-
         if (userFromDB != null) {
             if (!Objects.equals(user.getId(), userFromDB.getId())) {
                 return false;
             }
         }
-
-        System.out.println("CURRENT PASSWORD IS: " + userRepository.findByUsername(getById(id).getUsername()).getPassword());
-        System.out.println("NEW PASSWORD IS: " + user.getPassword());
-
         if (!(Objects.equals(userRepository.findByUsername(getById(id).getUsername()).getPassword(), user.getPassword()))) {
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            System.out.println("ENCRYPTING NEW PASSWORD:" + user.getPassword());
-
         }
-
         userRepository.save(user);
         return true;
     }
