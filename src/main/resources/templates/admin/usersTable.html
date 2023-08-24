@@ -69,7 +69,7 @@
                                        th:value="${user.password}"/>
                                 <br>
                                 <label for="roles"><b>Role</b></label>
-                                <select multiple class="form-control" th:size="${allRoles.size()}" id="roles" name="roles" th:field="*{roles}">
+                                <select multiple class="form-control" th:size="${allRoles.size()}" id="roles" name="roles" th:field="*{roles}" required>
                                     <option th:each="role: ${allRoles}"
                                             th:selected="${role.authority == 'ROLE_USER'}"
                                             th:text="${role.authority.replaceFirst('ROLE_', '')}"

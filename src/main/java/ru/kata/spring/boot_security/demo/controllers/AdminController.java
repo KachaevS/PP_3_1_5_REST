@@ -9,6 +9,7 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
+
 import java.security.Principal;
 import java.util.List;
 
@@ -18,8 +19,6 @@ public class AdminController {
 
     private final UserService userService;
     private final RoleService roleService;
-
-
     private List<Role> roles;
 
 
@@ -43,12 +42,12 @@ public class AdminController {
     }
 
     @PostMapping("/registration")
-    public ModelAndView addUser(@ModelAttribute("newUser") User user)
-    {
+    public ModelAndView addUser(@ModelAttribute("newUser") User user) {
         ModelAndView modelAndView = new ModelAndView();
+
         if (!userService.saveUser(user)) {
-            modelAndView.setViewName("admin/newUser");
-            modelAndView.addObject("message", "Пользователь с таким именем уже существует");
+            modelAndView.setViewName("error");
+            modelAndView.addObject("message", "User with this username already exists");
             return modelAndView;
         }
         modelAndView.setViewName("redirect:/admin");
@@ -61,83 +60,19 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-        @PostMapping("/{id}/edit")
+    @PostMapping("/{id}/edit")
     public ModelAndView editUser(@ModelAttribute("user") User user, @PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView();
 
-//        if (!userService.editUser(userService.getById(id))) {
-//            modelAndView.setViewName("admin/editUser");
-//            modelAndView.addObject("message", "Пользователь с таким именем уже существует");
-//            return modelAndView;
-//        }
+        if (!userService.editUser(user, id)) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("message", "User with this username already exists");
+            return modelAndView;
+        }
 
-        userService.editUser(user);
+        userService.editUser(user, id);
         modelAndView.setViewName("redirect:/admin");
         return modelAndView;
-    }
-
-
-//    @GetMapping("/edit/{id}")
-//    public ModelAndView editPage(@PathVariable("id") Long id) {
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("editPage");
-//        modelAndView.addObject("user", userService.getById(id));
-//        return modelAndView;
-//    }
-//
-//    @GetMapping("/delete/{id}")
-//    public ModelAndView deleteUser(@PathVariable("id") Long id) {
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("redirect:/admin");
-//        userService.delete(userService.getById(id));
-//        return modelAndView;
-//    }
-
-
-
-//    @PostMapping("/edit")
-//    public ModelAndView editUser(@ModelAttribute("user") User user) {
-//        ModelAndView modelAndView = new ModelAndView();
-//
-////        if (!userService.editUser(user)) {
-////            modelAndView.setViewName("admin/editUser");
-////            modelAndView.addObject("message", "Пользователь с таким именем уже существует");
-////            return modelAndView;
-////        }
-//        System.out.println("HERE COEMGSGSEGSEGSEGSEG");
-//        userService.editUser(user);
-//        modelAndView.setViewName("redirect:/admin");
-//        return modelAndView;
-//    }
-
-
-//
-//    @GetMapping("/registration")
-//    public ModelAndView registration() {
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("registration");
-//        modelAndView.addObject("newUser", new User());
-//        return modelAndView;
-//    }
-
-
-
-//    @GetMapping("/userForm")
-//    public String showEditDeleteUserPage(@RequestParam("userId") Long id, Model model) {
-//        model.addAttribute("user", userService.getById(id));
-//        model.addAttribute("allRoles", getRoles());
-//        return "admin/editUser";
-//    }
-
-    @PostMapping("/update")
-    public String saveUser(@RequestParam(value = "userId", defaultValue = "0") Long userId,
-//                           @RequestParam(value = "currentEmail", defaultValue = "") String currentEmail,
-                           @ModelAttribute("user") User user,
-                           Model model) {
-
-        user.setId((userId));
-        userService.saveUser(user);
-        return "redirect:/admin";
     }
 
 
