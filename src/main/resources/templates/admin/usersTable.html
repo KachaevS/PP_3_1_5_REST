@@ -48,12 +48,13 @@
 
                         </div>
                         <div class="modal-body col-md text-center">
-                            <form th:action="@{/{id}/update(id=${user.id})}"
-                                  th:object="${user}" th:method="PUT">
+                            <form th:action="@{admin/{id}/edit(id=${user.id})}"
+                                  th:object="${user}"
+                                  th:method="PUT">
 
                                 <br>
                                 <label for="name0"><b>Username</b></label>
-                                <input th:name="name" th:type="text"
+                                <input th:name="username" th:type="text"
                                        class="form-control" id="name0"
                                        th:value="${user.username}"/>
                                 <br>
@@ -102,7 +103,7 @@
                                     aria-label="Close"></button>
                         </div>
                         <form class="modal-body col-md text-center"
-                              th:action="@{/{id}/delete(id=${user.id})}"
+                              th:action="@{admin/{id}/delete(id=${user.id})}"
                               th:method="DELETE">
                             <div class="modal-body col-md">
                                 <label for="id"><b>ID</b></label>

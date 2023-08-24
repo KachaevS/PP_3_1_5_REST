@@ -33,6 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .successHandler(successUserHandler)
                 .and()
+                .csrf().disable()
                 .logout().logoutSuccessUrl("/login");
     }
 

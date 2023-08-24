@@ -3,15 +3,12 @@ package ru.kata.spring.boot_security.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
-
-import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
@@ -45,71 +42,92 @@ public class AdminController {
         return modelAndView;
     }
 
-    @GetMapping("/edit/{id}")
-    public ModelAndView editPage(@PathVariable("id") Long id) {
+    @PostMapping("/registration")
+    public ModelAndView addUser(@ModelAttribute("newUser") User user)
+    {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("editPage");
-        modelAndView.addObject("user", userService.getById(id));
-        return modelAndView;
-    }
-
-    @GetMapping("/delete/{id}")
-    public ModelAndView deleteUser(@PathVariable("id") Long id) {
-        ModelAndView modelAndView = new ModelAndView();
+        if (!userService.saveUser(user)) {
+            modelAndView.setViewName("admin/newUser");
+            modelAndView.addObject("message", "Пользователь с таким именем уже существует");
+            return modelAndView;
+        }
         modelAndView.setViewName("redirect:/admin");
-        userService.delete(userService.getById(id));
         return modelAndView;
     }
 
-    @PostMapping("/edit")
-    public ModelAndView editUser(@ModelAttribute("user") User user) {
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable("id") Long id) {
+        userService.delete(userService.getById(id));
+        return "redirect:/admin";
+    }
+
+        @PostMapping("/{id}/edit")
+    public ModelAndView editUser(@ModelAttribute("user") User user, @PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView();
 
-//        if (!userService.editUser(user)) {
+//        if (!userService.editUser(userService.getById(id))) {
 //            modelAndView.setViewName("admin/editUser");
 //            modelAndView.addObject("message", "Пользователь с таким именем уже существует");
 //            return modelAndView;
 //        }
-        System.out.println("HERE COEMGSGSEGSEGSEGSEG");
+
         userService.editUser(user);
         modelAndView.setViewName("redirect:/admin");
         return modelAndView;
     }
 
 
+//    @GetMapping("/edit/{id}")
+//    public ModelAndView editPage(@PathVariable("id") Long id) {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("editPage");
+//        modelAndView.addObject("user", userService.getById(id));
+//        return modelAndView;
+//    }
+//
+//    @GetMapping("/delete/{id}")
+//    public ModelAndView deleteUser(@PathVariable("id") Long id) {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("redirect:/admin");
+//        userService.delete(userService.getById(id));
+//        return modelAndView;
+//    }
 
-    @GetMapping("/registration")
-    public ModelAndView registration() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("registration");
-        modelAndView.addObject("newUser", new User());
-        return modelAndView;
-    }
-
-    @PostMapping("/registration")
-    public ModelAndView addUser(@ModelAttribute("newUser") User user)
-//                                @RequestParam(value = "isAdmin", required = false) boolean isAdmin)
-    {
-        ModelAndView modelAndView = new ModelAndView();
 
 
-        if (!userService.saveUser(user)) {
-            modelAndView.setViewName("newUser");
-            modelAndView.addObject("message", "Пользователь с таким именем уже существует");
-            return modelAndView;
-        }
+//    @PostMapping("/edit")
+//    public ModelAndView editUser(@ModelAttribute("user") User user) {
+//        ModelAndView modelAndView = new ModelAndView();
+//
+////        if (!userService.editUser(user)) {
+////            modelAndView.setViewName("admin/editUser");
+////            modelAndView.addObject("message", "Пользователь с таким именем уже существует");
+////            return modelAndView;
+////        }
+//        System.out.println("HERE COEMGSGSEGSEGSEGSEG");
+//        userService.editUser(user);
+//        modelAndView.setViewName("redirect:/admin");
+//        return modelAndView;
+//    }
 
-        modelAndView.setViewName("redirect:/admin");
-        return modelAndView;
-    }
 
-    @GetMapping("/userForm")
-    public String showEditDeleteUserPage(@RequestParam("userId") Long id, Model model) {
-        model.addAttribute("user", userService.getById(id));
-        model.addAttribute("allRoles", getRoles());
-        System.out.println("ASS=============================================");
-        return "admin/editUser";
-    }
+//
+//    @GetMapping("/registration")
+//    public ModelAndView registration() {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("registration");
+//        modelAndView.addObject("newUser", new User());
+//        return modelAndView;
+//    }
+
+
+
+//    @GetMapping("/userForm")
+//    public String showEditDeleteUserPage(@RequestParam("userId") Long id, Model model) {
+//        model.addAttribute("user", userService.getById(id));
+//        model.addAttribute("allRoles", getRoles());
+//        return "admin/editUser";
+//    }
 
     @PostMapping("/update")
     public String saveUser(@RequestParam(value = "userId", defaultValue = "0") Long userId,
