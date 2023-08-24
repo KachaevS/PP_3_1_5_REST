@@ -54,7 +54,7 @@ public class AdminController {
     }
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable("id") Long id) {
+    public String delete(@PathVariable("id") Long id, Principal principal) {
         userService.delete(userService.getById(id));
         return "redirect:/admin";
     }
