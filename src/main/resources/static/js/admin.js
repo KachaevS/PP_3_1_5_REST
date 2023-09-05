@@ -51,9 +51,6 @@ async function getAdminPanel() {
             modalForm.attr('data-id', buttonUserId);
             modalForm.attr('data-action', buttonAction);
             modalForm.modal('show');
-
-
-
         });
     } catch (error) {
         console.log(error.toString());
@@ -107,9 +104,61 @@ async function createModalForm(modal, id) {
             'password': modal.find('#editUserPassword').val(),
             'roles': modal.find('#editUserRoles').val().map((role, index) => ({id: role, name: null}))
         }
-        if (await fetchData(updateUser, modalActionButtonType.toLowerCase())) {
-            modal.modal('hide');
+        // if (await fetchData(updateUser, modalActionButtonType.toLowerCase())) {
+        //     modal.modal('hide');
+        // }
+
+        if (modalActionButtonType === 'Delete') {
+            if (await deleteUser(updateUser.id)) {
+                modal.modal('hide');
+
+            }
+        } else if (modalActionButtonType === 'Edit') {
+            if (await updateData(updateUser)) {
+                modal.modal('hide');
+            }
         }
+
+
+
+        async function deleteUser(id) {
+            try {
+                const response = await fetch(`/api/users/${id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    await getAdminPanel();
+                    console.log('Пользователь успешно удален');
+                    return true;
+                } else {
+                    console.log('Ошибка при удалении пользователя');
+                    return false;
+                }
+            } catch (error) {
+                console.log('Ошибка при удалении пользователя:', error.toString());
+                return false;
+            }
+        }
+
+        async function updateData(user) {
+            try {
+                const response = await fetch(`/api/users/${user.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(user)
+                });
+                if (response.ok) {
+                    await getAdminPanel();
+                    console.log('Пользователь успешно обновлен');
+                    return true;
+                } else {
+                    console.log('Ошибка при обновлении пользователя');
+                    return false;
+                }
+            } catch (error) {
+                console.log('Ошибка при обновлении пользователя:', error.toString());
+                return false;
+            }
+        }
+
 
     });
 }
@@ -275,4 +324,8 @@ function checkValidationErrors(data, type) {
             $(`#${type}UserRolesError`).append(`<div>${msg}</div>`);
         }
     })
+
+
+
+
 }

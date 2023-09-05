@@ -57,9 +57,9 @@ public class RESTController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PutMapping("/users")
-    public ResponseEntity<HttpStatus> editUser(@Valid @RequestBody UserDTO userDTO) {
-        userService.editUser(convertToUser(userDTO), userDTO.getId());
+    @PutMapping("/users/{id}")
+    public ResponseEntity<HttpStatus> editUser(@PathVariable Long id, @Valid @RequestBody UserDTO userDTO ) {
+        userService.editUser(convertToUser(userDTO), id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
