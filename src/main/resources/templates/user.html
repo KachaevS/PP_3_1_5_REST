@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
           rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
           crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 <header>
@@ -42,18 +41,7 @@
                                                 <th scope="col">Role</th>
                                             </tr>
                                             </thead>
-                                            <tbody>
-                                            <tr th:each="userInfo:${user}">
-                                                <th class="align-middle" scope="row" th:text="${userInfo.id}"></th>
-                                                <td class="align-middle" th:text="${userInfo.username}"></td>
-                                                <td class="align-middle" th:text="${userInfo.email}"></td>
-                                                <td>
-                                                <span th:each="role,status:${user.roles}">
-                                <span th:text="${role.name.startsWith('ROLE_')?role.name.substring(5):role.name}"></span>
-                                <span th:if="${!status.last}">,</span>
-                            </span>
-                                                </td>
-                                            </tr>
+                                            <tbody id="userTableBody">
                                             </tbody>
                                         </table>
                                     </div>
@@ -66,5 +54,7 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="../static/js/user.js"></script>
 </body>
 </html>

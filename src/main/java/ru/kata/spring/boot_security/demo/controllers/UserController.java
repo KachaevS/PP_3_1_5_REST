@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
@@ -33,6 +34,12 @@ public class UserController {
         }
 
         return modelAndView;
+    }
+
+    @ResponseBody
+    @GetMapping("/json")
+    public User jSonUser (Principal principal) {
+        return userService.findByUsername(principal.getName());
     }
 
 }

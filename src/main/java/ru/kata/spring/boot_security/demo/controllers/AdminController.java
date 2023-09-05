@@ -28,6 +28,8 @@ public class AdminController {
 
     }
 
+
+
     @GetMapping()
     public ModelAndView adminHomePage(Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
