@@ -51,6 +51,9 @@ async function getAdminPanel() {
             modalForm.attr('data-id', buttonUserId);
             modalForm.attr('data-action', buttonAction);
             modalForm.modal('show');
+
+
+
         });
     } catch (error) {
         console.log(error.toString());
@@ -133,7 +136,7 @@ function fillModalForm(userData, rolesData) {
                         <input type="text" class="form-control" id="editUserEmail" value="${userData.email}" ${ifDelete}/>
                         <div style="color: red" class="error-message" id="editUserEmailError"></div>
                     </div>
-                    ${modalActionButtonType != 'Delete' ? `
+                    ${modalActionButtonType !== 'Delete' ? `
                         <div class="m-3">
                             <label for="editUserPassword" class="bold-form-label">Password</label>
                             <input type="password" class="form-control" id="editUserPassword" name="editPassword" value=""/>
@@ -145,7 +148,7 @@ function fillModalForm(userData, rolesData) {
                         <select multiple class="form-select" size="${rolesData.length}" id="editUserRoles" ${ifDelete}>
                             ${rolesData.map(role => `
                                 <option value="${role.id}" ${userData.roles.some(r => r.id === role.id) ? 'selected' : ''}>
-                                    ${role.roleName}
+                                    ${role.name}
                                 </option>
                             `).join('')}
                         </select>
