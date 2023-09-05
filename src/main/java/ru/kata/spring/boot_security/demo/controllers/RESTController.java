@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.dto.UserDTO;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
@@ -66,6 +67,11 @@ public class RESTController {
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id) {
         userService.delete(userService.getById(id));
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/roles")
+    public List<Role> getRoles() {
+        return roleService.findAll();
     }
 
 
