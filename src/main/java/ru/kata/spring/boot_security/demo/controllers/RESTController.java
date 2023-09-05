@@ -47,20 +47,29 @@ public class RESTController {
 
 
     @GetMapping("/current")
-    public UserDTO showCurrentUserInfo (Principal principal) {
+    public UserDTO showCurrentUserInfo(Principal principal) {
         return convertToUserDTO(userService.findByUsername(principal.getName()));
     }
 
     @PostMapping("/users")
-    public ResponseEntity<HttpStatus> createUser(@Valid @RequestBody UserDTO userDTO) {
-        userService.saveUser(convertToUser(userDTO));
-        return ResponseEntity.ok(HttpStatus.OK);
+    public ResponseEntity<String> createUser(@Valid @RequestBody UserDTO userDTO) {
+        if (userService.saveUser(convertToUser(userDTO))) {
+            return ResponseEntity.ok().body("Пользователь успешно добавлен");
+        } else {
+            return ResponseEntity.badRequest().body("Пользователь с таким именем уже существует");
+        }
+
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<HttpStatus> editUser(@PathVariable Long id, @Valid @RequestBody UserDTO userDTO ) {
-        userService.editUser(convertToUser(userDTO), id);
-        return ResponseEntity.ok(HttpStatus.OK);
+    public ResponseEntity<String> editUser(@PathVariable Long id, @Valid @RequestBody UserDTO userDTO) {
+
+        if (userService.editUser(convertToUser(userDTO), id)) {
+            return ResponseEntity.ok().body("Пользователь успешно изменен");
+        } else {
+            return ResponseEntity.badRequest().body("Пользователь с таким именем уже существует");
+        }
+
     }
 
     @DeleteMapping("/users/{id}")

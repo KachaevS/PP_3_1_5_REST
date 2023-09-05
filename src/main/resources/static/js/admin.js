@@ -1,5 +1,3 @@
-alert("ASS")
-
 const headers = new Headers();
 headers.append('Content-Type', 'application/json; charset=utf-8');
 let modalActionButtonType = ''
@@ -135,12 +133,18 @@ async function createModalForm(modal, id) {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(user)
                 });
+
                 if (response.ok) {
                     await getAdminPanel();
                     console.log('Пользователь успешно обновлен');
                     return true;
                 } else {
-                    console.log('Ошибка при обновлении пользователя');
+                    if (response.status === 400) {
+                        const errorMessage = await response.text();
+                        alert (errorMessage)
+                    } else {
+                        console.log('Ошибка при обновлении пользователя');
+                    }
                     return false;
                 }
             } catch (error) {
@@ -246,7 +250,7 @@ async function createUser() {
 
 async function fetchData(data, requestType) {
     try {
-        const response = await fetch(`/api/users/`, {
+        const response = await fetch("/api/users/", {
             method: 'POST',
             headers: headers,
             body: JSON.stringify(data)
@@ -254,14 +258,18 @@ async function fetchData(data, requestType) {
 
         if (response.ok) {
             await getAdminPanel();
-            return true
+            return true;
         } else if (response.status === 400) {
-            const errorsData = await response.json();
-            checkValidationErrors(errorsData, requestType);
-            return false
+            const errorsData = await response.text();
+            if (errorsData === "Пользователь с таким именем уже существует") {
+                alert(errorsData)
+            } else {
+                checkValidationErrors(errorsData, requestType);
+            }
+            return false;
         } else {
             console.log("Error getting data");
-            return false
+            return false;
         }
     } catch (error) {
         console.log(error.toString());

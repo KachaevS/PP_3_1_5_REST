@@ -28,8 +28,6 @@ public class AdminController {
 
     }
 
-
-
     @GetMapping()
     public ModelAndView adminHomePage(Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
@@ -39,40 +37,6 @@ public class AdminController {
         modelAndView.addObject("users", userService.allUsers());
         modelAndView.addObject("newUser", new User());
         modelAndView.addObject("allRoles", getRoles());
-        return modelAndView;
-    }
-
-    @PostMapping("/registration")
-    public ModelAndView addUser(@ModelAttribute("newUser") User user) {
-        ModelAndView modelAndView = new ModelAndView();
-
-        if (!userService.saveUser(user)) {
-            modelAndView.setViewName("error");
-            modelAndView.addObject("message", "User with this username already exists");
-            return modelAndView;
-        }
-        modelAndView.setViewName("redirect:/admin");
-        return modelAndView;
-    }
-
-    @PostMapping("/{id}/delete")
-    public String delete(@PathVariable("id") Long id, Principal principal) {
-        userService.delete(userService.getById(id));
-        return "redirect:/admin";
-    }
-
-    @PostMapping("/{id}/edit")
-    public ModelAndView editUser(@ModelAttribute("user") User user, @PathVariable("id") Long id) {
-        ModelAndView modelAndView = new ModelAndView();
-
-        if (!userService.editUser(user, id)) {
-            modelAndView.setViewName("error");
-            modelAndView.addObject("message", "User with this username already exists");
-            return modelAndView;
-        }
-
-        userService.editUser(user, id);
-        modelAndView.setViewName("redirect:/admin");
         return modelAndView;
     }
 
