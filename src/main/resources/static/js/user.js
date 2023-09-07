@@ -7,7 +7,7 @@ async function getCurrentUser() {
     const userTable = document.querySelector('#userTableBody');
 
     try {
-        const response = await fetch('/api/current');
+        const response = await fetch('user/api/current');
         const user = await response.json();
 
         temp += `

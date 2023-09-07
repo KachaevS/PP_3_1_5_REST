@@ -17,15 +17,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
-public class RESTController {
+@RequestMapping("/admin/api")
+public class RESTController_Admin {
 
     private final UserService userService;
     private final RoleService roleService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public RESTController(UserService userService, RoleService roleService, ModelMapper modelMapper) {
+    public RESTController_Admin(UserService userService, RoleService roleService, ModelMapper modelMapper) {
         this.userService = userService;
         this.roleService = roleService;
         this.modelMapper = modelMapper;

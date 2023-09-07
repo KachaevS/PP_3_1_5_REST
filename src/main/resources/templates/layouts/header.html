@@ -1,11 +1,31 @@
-<header class="container-fluid d-flex flex-row align-items-center justify-content-between p-3 bg-dark text-white"
-        xmlns:th="https://www.thymeleaf.org" lang="en">
+<header id="user-header" class="container-fluid d-flex flex-row align-items-center justify-content-between p-3 bg-dark text-white">
     <div class="fs-4">
-        <b th:text="${user.email} "></b> with roles:
-        <span th:each="role,status:${user.roles}">
-                <span th:text="${role.name.startsWith('ROLE_')?role.name.substring(5):role.name}"></span>
-                <span th:if="${!status.last}">,</span>
-            </span>
+        <b id="user-email"></b> with roles:
+        <span id="user-roles"></span>
     </div>
-    <div> <a class="text-secondary fs-5" th:href="@{/logout}" style="text-decoration: none;">Logout</a></div>
+    <div>
+        <a class="text-secondary fs-5" href="/logout" style="text-decoration: none;">Logout</a>
+    </div>
 </header>
+
+<script>
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'user/api/current', true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var user = JSON.parse(xhr.responseText);
+            document.getElementById('user-email').textContent = user.email;
+            var rolesElement = document.getElementById('user-roles');
+            user.roles.forEach(function(role, index) {
+                var roleName = role.name.startsWith('ROLE_') ? role.name.substring(5) : role.name;
+                var roleText = document.createTextNode(roleName);
+                rolesElement.appendChild(roleText);
+                if (index < user.roles.length - 1) {
+                    var comma = document.createTextNode(',');
+                    rolesElement.appendChild(comma);
+                }
+            });
+        }
+    };
+    xhr.send();
+</script>

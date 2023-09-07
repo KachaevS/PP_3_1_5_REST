@@ -13,7 +13,7 @@ async function getAdminPanel() {
     try {
         let temp = '';
         const usersTable = document.querySelector('#allUsersTable');
-        const response = await fetch('/api/users');
+        const response = await fetch('/admin/api/users');
         const users = await response.json();
 
         users.forEach(user => {
@@ -77,8 +77,8 @@ async function createModalForm(modal, id) {
 
     try {
         const [userResponse, roleResponse] = await Promise.all([
-            fetch('/api/users/' + id),
-            fetch('/api/roles')
+            fetch('/admin/api/users/' + id),
+            fetch('/admin/api/roles')
         ]);
         const user = await userResponse.json();
         const roles = await roleResponse.json();
@@ -111,7 +111,7 @@ async function createModalForm(modal, id) {
 
         async function deleteUser(id) {
             try {
-                const response = await fetch(`/api/users/${id}`, { method: 'DELETE' });
+                const response = await fetch(`/admin/api/users/${id}`, { method: 'DELETE' });
                 if (response.ok) {
                     await getAdminPanel();
                     console.log('Пользователь успешно удален');
@@ -128,7 +128,7 @@ async function createModalForm(modal, id) {
 
         async function updateData(user) {
             try {
-                const response = await fetch(`/api/users/${user.id}`, {
+                const response = await fetch(`/admin/api/users/${user.id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(user)
@@ -206,7 +206,7 @@ async function fillNewUserForm() {
     const form = document.querySelector('#newUserRoles-div')
 
     try {
-        const response = await fetch('/api/roles');
+        const response = await fetch('/admin/api/roles');
         const roles = await response.json();
 
         form.innerHTML = `
@@ -250,7 +250,7 @@ async function createUser() {
 
 async function fetchData(data, requestType) {
     try {
-        const response = await fetch("/api/users/", {
+        const response = await fetch("/admin/api/users/", {
             method: 'POST',
             headers: headers,
             body: JSON.stringify(data)
